@@ -6,7 +6,7 @@ import 'package:flutter_quiz_app/consts/colors.dart';
 import 'package:flutter_quiz_app/consts/images.dart';
 import 'package:flutter_quiz_app/consts/text_style.dart';
 
-import 'api_services.dart';
+import '../api_services.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({Key? key}) : super(key: key);
@@ -125,7 +125,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 icon: const Icon(
                                   CupertinoIcons.xmark,
                                   color: Colors.white,
-                                  size: 28,
+                                  size: 22,
                                 )),
                           ),
                           Stack(
@@ -133,11 +133,11 @@ class _QuizScreenState extends State<QuizScreen> {
                             children: [
                               normalText(
                                   color: Colors.white,
-                                  size: 24,
+                                  size: 18,
                                   text: "$seconds"),
                               SizedBox(
-                                width: 80,
-                                height: 80,
+                                width: 40,
+                                height: 40,
                                 child: CircularProgressIndicator(
                                   value: seconds / 60,
                                   valueColor: const AlwaysStoppedAnimation(
@@ -146,19 +146,45 @@ class _QuizScreenState extends State<QuizScreen> {
                               ),
                             ],
                           ),
-                          Container(),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(color: lightgrey, width: 2),
+                            ),
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  CupertinoIcons.power,
+                                  color: Colors.white,
+                                  size: 22,
+                                )),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Image.asset(ideas, width: 200),
+                      Image.asset(
+                        ideas,
+                        width: 200,
+                        height: 100,
+                      ),
                       const SizedBox(height: 20),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: normalText(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          normalText(
                             color: lightgrey,
                             size: 18,
                             text:
-                                "Question ${currentQuestionIndex + 1} of ${data.length}                    Points Earned $points"),
+                                "Question ${currentQuestionIndex + 1} of ${data.length}",
+                          ),
+                          normalText(
+                            color: lightgrey,
+                            size: 18,
+                            text: "Points Earned $points",
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       normalText(
