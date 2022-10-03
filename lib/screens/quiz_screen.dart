@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_app/consts/colors.dart';
@@ -7,6 +6,8 @@ import 'package:flutter_quiz_app/consts/images.dart';
 import 'package:flutter_quiz_app/consts/text_style.dart';
 
 import '../api_services.dart';
+import '../consts/variables.dart';
+import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({Key? key}) : super(key: key);
@@ -16,25 +17,6 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  var currentQuestionIndex = 0;
-  int seconds = 60;
-  Timer? timer;
-  late Future quiz;
-
-  int points = 0;
-
-  var isLoaded = false;
-
-  var optionsList = [];
-
-  var optionsColor = [
-    Colors.white,
-    Colors.white,
-    Colors.white,
-    Colors.white,
-    Colors.white,
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -46,16 +28,6 @@ class _QuizScreenState extends State<QuizScreen> {
   void dispose() {
     timer!.cancel();
     super.dispose();
-  }
-
-  resetColors() {
-    optionsColor = [
-      Colors.white,
-      Colors.white,
-      Colors.white,
-      Colors.white,
-      Colors.white,
-    ];
   }
 
   startTimer() {
@@ -77,6 +49,12 @@ class _QuizScreenState extends State<QuizScreen> {
     timer!.cancel();
     seconds = 60;
     startTimer();
+  }
+
+  onRefresh(userCred) {
+    setState(() {
+      user = userCred;
+    });
   }
 
   @override
@@ -147,19 +125,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             ],
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: lightgrey, width: 2),
-                            ),
-                            child: IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(
-                                  CupertinoIcons.power,
-                                  color: Colors.white,
-                                  size: 22,
-                                )),
+                            
                           ),
                         ],
                       ),
@@ -201,25 +167,37 @@ class _QuizScreenState extends State<QuizScreen> {
 
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                if (answer.toString() ==
-                                    optionsList[index].toString()) {
-                                  optionsColor[index] = Colors.green;
-                                  points = points + 10;
-                                } else {
-                                  optionsColor[index] = Colors.red;
-                                }
+                              setState(
+                                () {
+                                  if (answer.toString() ==
+                                      optionsList[index].toString()) {
+                                    optionsColor[index] = Colors.green;
+                                    points = points + 10;
+                                  } else {
+                                    optionsColor[index] = Colors.red;
+                                  }
 
-                                if (currentQuestionIndex < data.length - 1) {
-                                  Future.delayed(const Duration(seconds: 1),
-                                      () {
-                                    gotoNextQuestion();
-                                  });
-                                } else {
-                                  timer!.cancel();
-                                  //here you can do whatever you want with the results
-                                }
-                              });
+                                  if (currentQuestionIndex < data.length - 1) {
+                                    Future.delayed(const Duration(seconds: 1),
+                                        () {
+                                      gotoNextQuestion();
+                                    });
+                                  } else if (currentQuestionIndex ==
+                                      data.length - 1) {
+                                    timer!.cancel();
+                                    //here you can do whatever you want with the results
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ResultScreen(
+                                          onSignOut: (userCred) =>
+                                              onRefresh(userCred),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
                             },
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 20),

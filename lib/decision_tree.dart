@@ -3,6 +3,8 @@ import 'package:flutter_quiz_app/screens/home_screen.dart';
 import 'package:flutter_quiz_app/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'consts/variables.dart';
+
 
 class DecisionTree extends StatefulWidget {
   const DecisionTree({super.key});
@@ -12,7 +14,6 @@ class DecisionTree extends StatefulWidget {
 }
 
 class _DecisionTreeState extends State<DecisionTree> {
-  User? user;
   @override
   void initState() {
     super.initState();
