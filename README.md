@@ -9,6 +9,8 @@ This project is a starting point for a Flutter application.
 Some of the screenshots of this project
 
 <img src="assets/screenshots/s1.png" />
+<br>
+<br>
 <img src="assets/screenshots/s2.png" />
 
 A few resources to get you started if this is your first Flutter project:
